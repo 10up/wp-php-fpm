@@ -1,3 +1,6 @@
+# multi stage build to install msmtp. I am aware that msmtp is available
+# in the centos 7 repos but I want it consistent with the centos 8 build,
+# don't @ me
 ARG PHP_VERSION=7.1
 FROM dustinrue/base-php:${PHP_VERSION} AS builder
 
@@ -19,7 +22,7 @@ USER root
 
 COPY --from=builder /usr/local /usr/local
 
-RUN export VERSION=$(echo $PHP_VERSION | sed -E 's/([0-9]).([0-9])/\1\2/g'); echo $VERSION; yum install php-fpm --enablerepo=remi-php${VERSION} -y && yum clean all
+RUN export VERSION=$(echo $PHP_VERSION | sed -E 's/([0-9]).([0-9])/\1\2/g'); yum install php-fpm --enablerepo=remi-php${VERSION} -y && yum clean all
 
 RUN mkdir -p /run/php-fpm && \
   chown 33:33 $_ && \

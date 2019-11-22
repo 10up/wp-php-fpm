@@ -1,3 +1,4 @@
+# multi stage build to install msmtp.
 ARG PHP_VERSION=7.3
 FROM dustinrue/base-php:${PHP_VERSION} AS builder
 
