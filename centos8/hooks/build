@@ -1,0 +1,5 @@
+#!/bin/bash
+
+set -x
+IMAGE=$(echo $IMAGE_NAME | sed -E 's/index\.docker\.io\/(.*)\:.*/\1/')
+docker build --build-arg PHP_VERSION=$DOCKER_TAG -t $IMAGE:$DOCKER_TAG .

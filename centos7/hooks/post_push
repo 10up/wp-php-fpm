@@ -1,0 +1,6 @@
+#!/bin/bash
+
+IMAGE=$(echo $IMAGE_NAME | sed -E 's/index\.docker\.io\/(.*)\:.*/\1/')
+GIT_HASH=$(git rev-parse --short $SOURCE_COMMIT)
+docker tag $IMAGE:$DOCKER_TAG $IMAGE:$DOCKER_TAG-$GIT_HASH
+docker push $IMAGE:$DOCKER_TAG-$GIT_HASH
