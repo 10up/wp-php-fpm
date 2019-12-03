@@ -28,6 +28,7 @@ RUN mkdir -p /run/php-fpm && \
   chown 33:33 $_
 COPY config/php-fpm.conf /etc/php-fpm.conf
 COPY config/www.conf /etc/php-fpm.d/www.conf
+COPY config/docker-opcache.ini /etc/php.d/docker-opcache.ini
 RUN echo "post_max_size = 150m" >> /etc/php.d/upload-limits.ini
 RUN echo "upload_max_filesize = 150m" >> /etc/php.d/upload-limits.ini
 
