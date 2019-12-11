@@ -2,7 +2,7 @@
 # in the centos 7 repos but I want it consistent with the centos 8 build,
 # don't @ me
 ARG PHP_VERSION=7.1
-FROM dustinrue/base-php:${PHP_VERSION} AS builder
+FROM 10up/base-php:${PHP_VERSION} AS builder
 
 ARG PHP_VERSION=7.1
 ARG MSMTP_VERSION=1.8.6
@@ -14,7 +14,7 @@ RUN wget https://marlam.de/msmtp/releases/msmtp-${MSMTP_VERSION}.tar.xz && tar x
 RUN cd msmtp-${MSMTP_VERSION} && autoreconf -i && ./configure && make && make install
 
 ARG PHP_VERSION=7.1
-FROM  dustinrue/base-php:${PHP_VERSION}
+FROM  10up/base-php:${PHP_VERSION}
 
 ARG PHP_VERSION=7.1
 

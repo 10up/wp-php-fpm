@@ -9,7 +9,7 @@ This image runs just php-fpm and expects that files are located at `/var/www/htm
 ```
 docker run -d --name phpfpm \
   -v /var/www/html:/var/www/html
-  dustinrue/wp-php-fpm
+  10up/wp-php-fpm
 ```
 
 This image is configured with MSMTP for handling email. It can only be configured to talk to an even smarter smart host meaning it cannot be configured with authentication of any sort. To configure MSMTP pass the following environment variables
