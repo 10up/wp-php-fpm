@@ -1,6 +1,8 @@
 # CentOS - wp-php-fpm
 
-This image extends the base-php image to include php-fpm focussing on serving WordPress. 
+> This image extends the base-php image to include php-fpm focussing on serving WordPress. 
+
+[![Support Level](https://img.shields.io/badge/support-active-green.svg)](#support-level) [![MIT License](https://img.shields.io/github/license/10up/wp-php-fpm.svg)](https://github.com/10up/wp-php-fpm/blob/master/LICENSE)
 
 ## Usage
 
@@ -18,7 +20,6 @@ This image is configured with MSMTP for handling email. It can only be configure
 * `MAILER_PORT=<your mailer hosts port>`
 
 The entrypoint script will then configure MSMTP properly.
-
 
 ## Building
 
