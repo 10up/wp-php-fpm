@@ -29,6 +29,7 @@ RUN curl -so - https://download.newrelic.com/php_agent/release/newrelic-php5-${N
   echo 'newrelic.daemon.start_timeout = "5s"' >> /etc/php.d/10-newrelic.ini && \
   echo 'newrelic.daemon.app_connect_timeout = "15s"' >> /etc/php.d/10-newrelic.ini && \
   echo 'newrelic.logfile = /dev/stderr' >> /etc/php.d/10-newrelic.ini && \
+  echo 'newrelic.loglevel = warning' >> /etc/php.d/10-newrelic.ini && \
   echo 'newrelic.enabled = false' >> /etc/php.d/10-newrelic.ini
 
 RUN mkdir -p /run/php-fpm && \
