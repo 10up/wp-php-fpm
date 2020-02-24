@@ -16,11 +16,7 @@ stages:
     DOCKER_HOST: tcp://localhost:2375
   script:
     - cd ${BASE:?}
-    - |
-      export DOCKER_TAG=${PHP_VERSION}
-      if [ ${BASE} = "centos7" ]; then
-        PHP_VERSION=$(echo $DOCKER_TAG | sed -E 's/([0-9]).([0-9])/\1\2/g')
-      fi
+    - export DOCKER_TAG=${PHP_VERSION}
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
     - docker build --pull --network host --build-arg PHP_VERSION=$PHP_VERSION --tag $CI_REGISTRY_IMAGE:${DOCKER_TAG} --tag $CI_REGISTRY_IMAGE:${DOCKER_TAG}-${CI_COMMIT_SHORT_SHA}  .
     - docker push $CI_REGISTRY_IMAGE:${DOCKER_TAG}
