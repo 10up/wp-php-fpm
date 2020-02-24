@@ -17,7 +17,6 @@ ARG PHP_VERSION=7.1
 FROM  10up/base-php:${PHP_VERSION}
 
 ARG PHP_VERSION=7.1
-ARG NR_AGENT_VERSION=9.7.0.258
 
 USER root
 
@@ -25,8 +24,8 @@ COPY --from=builder /usr/local /usr/local
 
 RUN export VERSION=$(echo $PHP_VERSION | sed -E 's/([0-9]).([0-9])/\1\2/g'); yum install php-fpm --enablerepo=remi-php${VERSION} -y && yum clean all
 
-RUN curl -so - https://download.newrelic.com/php_agent/release/newrelic-php5-${NR_AGENT_VERSION}-linux.tar.gz | tar zxf - && \
-  cd newrelic-php5-${NR_AGENT_VERSION}-linux && NR_INSTALL_SILENT=1 NR_INSTALL_USE_CP_NOT_LN=1 ./newrelic-install install && \
+RUN export NR_AGENT_VERSION=$(curl https://download.newrelic.com/php_agent/release/ | grep "linux.tar" | sed -E 's/.*release\/(.+)\".*/\1/'); curl -so - https://download.newrelic.com/php_agent/release/${NR_AGENT_VERSION} | tar zxf - && \
+  cd ${NR_AGENT_VERSION:0:-7} && NR_INSTALL_SILENT=1 NR_INSTALL_USE_CP_NOT_LN=1 ./newrelic-install install && \
   rm -rf /tmp/nrinstall* && \
   mv /etc/php.d/newrelic.ini /etc/php.d/10-newrelic.ini && \
   echo 'newrelic.daemon.start_timeout = "5s"' >> /etc/php.d/10-newrelic.ini && \
