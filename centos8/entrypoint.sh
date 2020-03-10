@@ -7,4 +7,13 @@ port ${MAILER_PORT:-1025}
 auto_from on
 EOF
 
+if [ ! -z "${NR_LICENSE_KEY}" ]; then
+cat > /etc/php.d/newrelic.ini <<EOF
+newrelic.enabled = true
+newrelic.daemon.address = ${NR_HOST}
+newrelic.license = ${NR_LICENSE_KEY}
+newrelic.appname = ${NR_APP_NAME:-wordpress}
+EOF
+fi
+
 exec /usr/sbin/php-fpm -F
