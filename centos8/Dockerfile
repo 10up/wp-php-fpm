@@ -35,6 +35,8 @@ RUN mkdir -p /run/php-fpm && \
   chown 33:33 $_ && \
   chown 33:33 /var/log/php-fpm && \
   touch /usr/local/etc/msmtprc && \
+  chown 33:33 $_ && \
+  touch /etc/php.d/newrelic.ini && \
   chown 33:33 $_
 
 COPY config/php-fpm.conf /etc/php-fpm.conf
