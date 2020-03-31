@@ -16,4 +16,5 @@ newrelic.appname = ${NR_APP_NAME:-wordpress}
 EOF
 fi
 
+# changing this will break dependent images
 exec /usr/sbin/php-fpm -F
