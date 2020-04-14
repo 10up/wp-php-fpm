@@ -44,6 +44,7 @@ COPY config/www.conf /etc/php-fpm.d/www.conf
 COPY config/docker-opcache.ini /etc/php.d/docker-opcache.ini
 RUN echo "post_max_size = 150m" >> /etc/php.d/upload-limits.ini
 RUN echo "upload_max_filesize = 150m" >> /etc/php.d/upload-limits.ini
+RUN echo "catch_workers_output = yes" >> /etc/php-fpm.d/www.conf
 
 RUN echo 'alias ls="ls --color=auto"' > /etc/profile.d/colorls.sh
 COPY entrypoint.sh /entrypoint.sh
