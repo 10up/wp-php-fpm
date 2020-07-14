@@ -1,6 +1,6 @@
 # CentOS - wp-php-fpm
 
-> This image extends the base-php image to include php-fpm focussing on serving WordPress. 
+> This image extends the `base-php` image to include `php-fpm` focussing on serving WordPress.  This image also includes the New Relic PHP agent which is disabled by default.
 
 [![Support Level](https://img.shields.io/badge/support-active-green.svg)](#support-level) [![MIT License](https://img.shields.io/github/license/10up/wp-php-fpm.svg)](https://github.com/10up/wp-php-fpm/blob/master/LICENSE)
 
@@ -20,6 +20,19 @@ This image is configured with MSMTP for handling email. It can only be configure
 * `MAILER_PORT=<your mailer hosts port>`
 
 The entrypoint script will then configure MSMTP properly.
+
+### Using New Relic Agent
+
+By default, the New Relic Agent is installed but disabled. To enable it you must mount a config file at `/etc/php.d/newrelic.ini` (or similar) with at least the following items:
+
+```
+newrelic.enabled = true
+newrelic.appname = "YOUR APP NAME"
+newrelic.license = "YOUR LICENSE KEY"
+newrelic.daemon.address = "HOST:PORT"
+```
+
+The configuration assumes you will have the New Relic Daemon running elsewhere as a separate container or process. You can read more about it at https://docs.newrelic.com/docs/agents/php-agent/advanced-installation/docker-other-container-environments-install-php-agent#install-diff-containers.
 
 ## Building
 
