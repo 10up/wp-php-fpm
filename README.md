@@ -1,6 +1,8 @@
 # CentOS - wp-php-fpm
 
-This image extends the base-php image to include php-fpm focusing on serving WordPress. This image also includes the New Relic PHP agent which is disabled by default.
+> This image extends the `base-php` image to include `php-fpm` focussing on serving WordPress.  This image also includes the New Relic PHP agent which is disabled by default.
+
+[![Support Level](https://img.shields.io/badge/support-active-green.svg)](#support-level) [![MIT License](https://img.shields.io/github/license/10up/wp-php-fpm.svg)](https://github.com/10up/wp-php-fpm/blob/master/LICENSE)
 
 ## Usage
 
@@ -31,7 +33,6 @@ newrelic.daemon.address = "HOST:PORT"
 ```
 
 The configuration assumes you will have the New Relic Daemon running elsewhere as a separate container or process. You can read more about it at https://docs.newrelic.com/docs/agents/php-agent/advanced-installation/docker-other-container-environments-install-php-agent#install-diff-containers.
-
 
 ## Building
 
