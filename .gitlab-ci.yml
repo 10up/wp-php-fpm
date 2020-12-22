@@ -61,3 +61,8 @@ PHP 7.4:
     BASE: 'centos8'
   extends: .common
 
+PHP 8.0:
+  variables:
+    PHP_VERSION: '8.0'
+    BASE: 'centos8'
+  extends: .common

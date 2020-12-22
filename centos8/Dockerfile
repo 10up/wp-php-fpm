@@ -21,7 +21,7 @@ USER root
 COPY --from=builder /usr/local /usr/local
 RUN yum install php-fpm -y && yum clean all
 
-RUN export NR_AGENT_VERSION=$(curl https://download.newrelic.com/php_agent/release/ | grep "linux.tar" | sed -E 's/.*release\/(.+)\".*/\1/'); curl -so - https://download.newrelic.com/php_agent/release/${NR_AGENT_VERSION} | tar zxf - && \
+RUN if [ ${PHP_VERSION} == "8.0" ]; then exit 0; fi ; export NR_AGENT_VERSION=$(curl https://download.newrelic.com/php_agent/release/ | grep "linux.tar" | sed -E 's/.*release\/(.+)\".*/\1/'); curl -so - https://download.newrelic.com/php_agent/release/${NR_AGENT_VERSION} | tar zxf - && \
   cd ${NR_AGENT_VERSION:0:-7} && NR_INSTALL_SILENT=1 NR_INSTALL_USE_CP_NOT_LN=1 ./newrelic-install install && \
   rm -rf /tmp/nrinstall* && \
   mv /etc/php.d/newrelic.ini /etc/php.d/10-newrelic.ini && \
