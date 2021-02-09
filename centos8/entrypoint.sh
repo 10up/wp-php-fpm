@@ -7,6 +7,11 @@ port ${MAILER_PORT:-1025}
 auto_from on
 EOF
 
+cat >> /etc/php-fpm.d/www.conf <<EOF
+php_value[session.save_handler] = ${SESSION_HANDLER:-files}
+php_value[session.save_path]    = '${SESSION_PATH:-/var/lib/php/sessions}'
+EOF
+
 if [ ! -z "${NR_LICENSE_KEY}" ]; then
 cat > /etc/php.d/newrelic.ini <<EOF
 newrelic.enabled = true
