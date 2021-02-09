@@ -34,14 +34,14 @@ The configuration assumes you will have the New Relic Daemon running elsewhere a
 
 ### Session Variables
 
-By default, php-fpm is set to use files method as session handlers and session files are stored in ``. This can be changed to any other session handler by providing the environment variables, like for memcached use the following environment variables:
+By default, php-fpm is set to use files method as session handlers and session files are stored in `/var/lib/php/sessions`. This can be changed to any other session handler by providing the environment variables, like for memcached use the following environment variables:
 
 ```
 SESSION_HANDLER = memcached
 SESSION_PATH    = '127.0.0.1:11211'
 ``` 
 
-Change `SESSION_PATH` value to memcached server IPaddress or host record
+Change `SESSION_PATH` value to memcached server's IP address or host record
 
 ## Building
 
