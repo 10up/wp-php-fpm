@@ -32,6 +32,16 @@ newrelic.daemon.address = "HOST:PORT"
 
 The configuration assumes you will have the New Relic Daemon running elsewhere as a separate container or process. You can read more about it at https://docs.newrelic.com/docs/agents/php-agent/advanced-installation/docker-other-container-environments-install-php-agent#install-diff-containers.
 
+### Session Variables
+
+By default, php-fpm is set to use files method as session handlers and session files are stored in ``. This can be changed to any other session handler by providing the environment variables, like for memcached use the following environment variables:
+
+```
+SESSION_HANDLER = memcached
+SESSION_PATH    = '127.0.0.1:11211'
+``` 
+
+Change `SESSION_PATH` value to memcached server IPaddress or host record
 
 ## Building
 
