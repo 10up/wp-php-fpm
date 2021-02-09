@@ -5,7 +5,7 @@ ARG PHP_VERSION=7.1
 FROM 10up/base-php:${PHP_VERSION} AS builder
 
 ARG PHP_VERSION=7.1
-ARG MSMTP_VERSION=1.8.6
+ARG MSMTP_VERSION=1.8.14
 
 USER root
 RUN yum groupinstall "Development Tools" -y
