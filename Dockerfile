@@ -20,9 +20,12 @@ RUN apt install php${PHP_VERSION}-fpm msmtp curl -y && apt clean
 #  echo 'newrelic.loglevel = warning' >> /etc/php.d/10-newrelic.ini && \
 #  echo 'newrelic.enabled = false' >> /etc/php.d/10-newrelic.ini
 
-RUN mkdir -p /run/php-fpm && \
-  chown 33:33 /run/php-fpm && \
+RUN mkdir -p /run/php && \
+  chown 33:33 /run/php && \
   touch /etc/msmtprc && \
+  chown 33:33 /etc/msmtprc && \
+  touch /var/log/php${PHP_VERSION}-fpm.log && \
+  chown 33:33 /var/log/php${PHP_VERSION}-fpm.log && \
   ln -s /etc/php/${PHP_VERSION}/fpm/pool.d/ /etc/php-fpm.d 
 
 COPY config/php-fpm.conf /etc/php/5.6/fpm/php-fpm.conf
@@ -34,6 +37,7 @@ RUN echo "upload_max_filesize = 150m" >> /etc/php/${PHP_VERSION}/mods-available/
 RUN echo "catch_workers_output = yes" >> /etc/php-fpm.d/www.conf
 RUN chown 33:33 /etc/php-fpm.d/www.conf
 RUN phpenmod docker-opcache upload-limits
+RUN ln -s /usr/sbin/php-fpm${PHP_VERSION} /usr/sbin/php-fpm
 
 RUN echo 'alias ls="ls --color=auto"' > /etc/profile.d/colorls.sh
 COPY entrypoint.sh /entrypoint.sh

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cat > /usr/local/etc/msmtprc <<EOF
+cat > /etc/msmtprc <<EOF
 account default
 host ${MAILER_HOST:-mailcatcher}
 port ${MAILER_PORT:-1025}
