@@ -36,42 +36,42 @@ stages:
     refs:
       - feature/ubuntu
 
-#PHP 5.6:
-#  variables:
-#    PHP_VERSION: '5.6'
-#    PLATFORMS: 'linux/amd64,linux/arm64'
-#  extends: .common
+PHP 5.6:
+  variables:
+    PHP_VERSION: '5.6'
+    PLATFORMS: 'linux/amd64,linux/arm64'
+  extends: .common
 
-#PHP 7.0:
-#  variables:
-#    PHP_VERSION: '7.0'
-#    PLATFORMS: 'linux/amd64,linux/arm64'
-#  extends: .common
+PHP 7.0:
+  variables:
+    PHP_VERSION: '7.0'
+    PLATFORMS: 'linux/amd64,linux/arm64'
+  extends: .common
 
-#PHP 7.1:
-#  stage: build
-#  variables:
-#    PHP_VERSION: '7.1'
-#    PLATFORMS: 'linux/amd64,linux/arm64'
-#  extends: .common
+PHP 7.1:
+  stage: build
+  variables:
+    PHP_VERSION: '7.1'
+    PLATFORMS: 'linux/amd64,linux/arm64'
+  extends: .common
 
-#PHP 7.2:
-#  variables:
-#    PHP_VERSION: '7.2'
-#    PLATFORMS: 'linux/amd64,linux/arm64'
-#  extends: .common
+PHP 7.2:
+  variables:
+    PHP_VERSION: '7.2'
+    PLATFORMS: 'linux/amd64,linux/arm64'
+  extends: .common
 
-#PHP 7.3:
-#  variables:
-#    PHP_VERSION: '7.3'
-#    PLATFORMS: 'linux/amd64,linux/arm64'
-#  extends: .common
+PHP 7.3:
+  variables:
+    PHP_VERSION: '7.3'
+    PLATFORMS: 'linux/amd64,linux/arm64'
+  extends: .common
 
-#PHP 7.4:
-#  variables:
-#    PHP_VERSION: '7.4'
-#    PLATFORMS: 'linux/amd64,linux/arm64'
-#  extends: .common
+PHP 7.4:
+  variables:
+    PHP_VERSION: '7.4'
+    PLATFORMS: 'linux/amd64,linux/arm64'
+  extends: .common
 
 PHP 8.0:
   variables:
