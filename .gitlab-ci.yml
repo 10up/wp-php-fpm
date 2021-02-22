@@ -1,4 +1,7 @@
 ---
+variables:
+  CI_REGISTRY_URL: "$CI_REGISTRY/$CI_PROJECT_PATH"
+  BUILDX_VERSION: "v0.4.1"
 
 stages:
   - build
@@ -7,62 +10,71 @@ stages:
   image: docker
   stage: build
   services:
-    - docker:dind
+    - docker:19.03-dind
+  retry: 2
   tags:
     - kubernetes
   variables:
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: ""
-    DOCKER_HOST: tcp://localhost:2375
-  script:
-    - cd ${BASE:?}
-    - export DOCKER_TAG=${PHP_VERSION}
+    DOCKER_HOST: tcp://docker:2375
+  before_script:
+    - apk add curl
+    - mkdir -vp ~/.docker/cli-plugins/ ~/dockercache
+    - curl --silent -L "https://github.com/docker/buildx/releases/download/${BUILDX_VERSION}/buildx-${BUILDX_VERSION}.linux-amd64" > ~/.docker/cli-plugins/docker-buildx
+    - chmod a+x ~/.docker/cli-plugins/docker-buildx
+    - docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
-    - docker build --pull --network host --build-arg PHP_VERSION=$PHP_VERSION --tag $CI_REGISTRY_IMAGE:${DOCKER_TAG} --tag $CI_REGISTRY_IMAGE:${DOCKER_TAG}-${CI_COMMIT_SHORT_SHA}  .
-    - docker push $CI_REGISTRY_IMAGE:${DOCKER_TAG}
-    - docker push $CI_REGISTRY_IMAGE:${DOCKER_TAG}-${CI_COMMIT_SHORT_SHA}
+    - docker buildx create --use
+    - docker buildx inspect --bootstrap
+  script:
+    - |
+      export DOCKER_TAG=${PHP_VERSION}
+    - docker buildx build --no-cache --pull --build-arg PHP_VERSION=$PHP_VERSION --tag $CI_REGISTRY_URL:${DOCKER_TAG}-ubuntu --tag $CI_REGISTRY_URL:${DOCKER_TAG}-${CI_COMMIT_SHORT_SHA}-ubuntu --platform ${PLATFORMS} --push .
   when: on_success
   only:
-    - master
+    refs:
+      - feature/ubuntu
 
 PHP 5.6:
   variables:
     PHP_VERSION: '5.6'
-    BASE: 'centos7'
+    PLATFORMS: 'linux/amd64,linux/arm64'
   extends: .common
 
 PHP 7.0:
   variables:
     PHP_VERSION: '7.0'
-    BASE: 'centos7'
+    PLATFORMS: 'linux/amd64,linux/arm64'
   extends: .common
 
 PHP 7.1:
+  stage: build
   variables:
     PHP_VERSION: '7.1'
-    BASE: 'centos7'
+    PLATFORMS: 'linux/amd64,linux/arm64'
   extends: .common
 
 PHP 7.2:
   variables:
     PHP_VERSION: '7.2'
-    BASE: 'centos8'
+    PLATFORMS: 'linux/amd64,linux/arm64'
   extends: .common
 
 PHP 7.3:
   variables:
     PHP_VERSION: '7.3'
-    BASE: 'centos8'
+    PLATFORMS: 'linux/amd64,linux/arm64'
   extends: .common
 
 PHP 7.4:
   variables:
     PHP_VERSION: '7.4'
-    BASE: 'centos8'
+    PLATFORMS: 'linux/amd64,linux/arm64'
   extends: .common
 
 PHP 8.0:
   variables:
     PHP_VERSION: '8.0'
-    BASE: 'centos8'
+    PLATFORMS: 'linux/amd64,linux/arm64'
   extends: .common
