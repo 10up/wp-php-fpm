@@ -14,7 +14,7 @@ EOF
 
 
 if [ ! -z "${NR_LICENSE_KEY}" ]; then
-cat > /etc/php.d/newrelic.ini <<EOF
+cat > /etc/php/*/mods-available/newrelic.ini <<EOF
 newrelic.enabled = true
 newrelic.daemon.address = ${NR_HOST}
 newrelic.license = ${NR_LICENSE_KEY}
