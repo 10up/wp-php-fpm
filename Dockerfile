@@ -25,7 +25,9 @@ RUN mkdir -p /run/php-fpm && \
   chown 33:33 /etc/msmtprc && \
   touch /var/log/php${PHP_VERSION}-fpm.log && \
   chown 33:33 /var/log/php${PHP_VERSION}-fpm.log && \
-  ln -s /etc/php/${PHP_VERSION}/fpm/pool.d/ /etc/php-fpm.d 
+  ln -s /etc/php/${PHP_VERSION}/fpm/pool.d/ /etc/php-fpm.d && \
+  mkdir -p /var/log/newrelic && \
+  chown 33:33 /var/log/newrelic
 
 COPY config/php-fpm.conf /etc/php/${PHP_VERSION}/fpm/php-fpm.conf
 COPY config/www.conf /etc/php/${PHP_VERSION}/fpm/pool.d//www.conf
