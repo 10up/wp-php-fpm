@@ -1,6 +1,7 @@
 ARG PHP_VERSION=7.1
-ARG BASE_IMAGE=gitlab.dustinrue.com:5001/drue/base-php:${PHP_VERSION}-ubuntu
-# ARG BASE_IMAGE=10up/base-php:${PHP_VERSION}-ubuntu
+
+# Set a BASE_IMAGE CI var to specify a different base image
+ARG BASE_IMAGE=10up/base-php:${PHP_VERSION}-ubuntu
 FROM ${BASE_IMAGE}
 
 ARG PHP_VERSION=7.1
