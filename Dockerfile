@@ -19,8 +19,8 @@ RUN \
   echo 'newrelic.loglevel = warning' >> /etc/php/${PHP_VERSION}/mods-available/newrelic.ini && \
   echo 'newrelic.enabled = false' >> /etc/php/${PHP_VERSION}/mods-available/newrelic.ini
 
-RUN mkdir -p /run/php && \
-  chown 33:33 /run/php && \
+RUN mkdir -p /run/php-fpm && \
+  chown 33:33 /run/php-fpm && \
   touch /etc/msmtprc && \
   chown 33:33 /etc/msmtprc && \
   touch /var/log/php${PHP_VERSION}-fpm.log && \
