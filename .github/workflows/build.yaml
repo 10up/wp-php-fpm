@@ -3,7 +3,7 @@ name: Build Images
 on:
   push:
     branches:
-      - 'main'
+      - 'trunk'
 
 jobs:
   Build_PHP:
