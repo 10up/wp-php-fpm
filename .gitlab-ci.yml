@@ -1,4 +1,23 @@
 ---
+# Variables to be set (most optional) in you CI vars
+#   * CI_REGISTRY_IMAGE (required) - the full url for your image name. docker.io/10up/base-php for docker, for example
+#   * CI_REGISTRY_USER (optional) - the user for the registry. Don't override this for gitlab unless you know what you're doing
+#   * CI_REGISTRY_PASSWORD (optional) - the password for the registry. Don't override this for gitlab unless you know what you're doing
+#   * CI_REGISTRY (optional) - the registry URL (optional). Don't override this for gitlab unless you know what you're doing
+# 
+# The gitlab-runner must be installed with these settings in the runners: section
+# config: |
+#   [[runners]]
+#     [runners.kubernetes]
+#       image = "ubuntu:20.04"
+#       privileged = true
+#     [[runners.kubernetes.volumes.empty_dir]]
+#       name = "docker-certs"
+#       mount_path = "/certs/client"
+#       medium = "Memory"
+#
+variables:
+  BUILDX_VERSION: "v0.5.1"
 
 stages:
   - build
@@ -7,24 +26,66 @@ stages:
   image: docker
   stage: build
   services:
-    - docker:dind
+    - docker:19-dind
+  variables:
+    DOCKER_HOST: tcp://docker:2376
+    DOCKER_TLS_CERTDIR: "/certs"
+    DOCKER_TLS_VERIFY: 1
+    DOCKER_CERT_PATH: "$DOCKER_TLS_CERTDIR/client"
+  retry: 2
   tags:
     - kubernetes
-  variables:
-    DOCKER_DRIVER: overlay2
-    DOCKER_TLS_CERTDIR: ""
-    DOCKER_HOST: tcp://localhost:2375
+  before_script:
+    - i=0; while [ "$i" -lt 12 ]; do docker info && break; sleep 5; i=$(( i + 1 )) ; done
   script:
     - cd ${BASE:?}
-    - export DOCKER_TAG=${PHP_VERSION}
+    - |
+      export DOCKER_TAG=${PHP_VERSION}
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
-    - docker build --pull --network host --build-arg PHP_VERSION=$PHP_VERSION --tag $CI_REGISTRY_IMAGE:${DOCKER_TAG} --tag $CI_REGISTRY_IMAGE:${DOCKER_TAG}-${CI_COMMIT_SHORT_SHA}  .
+    - docker build --no-cache --pull --network host --build-arg BASE_IMAGE=${CI_BASE_IMAGE:-10up/base-php}:${PHP_VERSION} --build-arg PHP_VERSION=$PHP_VERSION --tag $CI_REGISTRY_IMAGE:${DOCKER_TAG} --tag $CI_REGISTRY_IMAGE:${DOCKER_TAG}-${CI_COMMIT_SHORT_SHA}  .
     - docker push $CI_REGISTRY_IMAGE:${DOCKER_TAG}
     - docker push $CI_REGISTRY_IMAGE:${DOCKER_TAG}-${CI_COMMIT_SHORT_SHA}
   when: on_success
   only:
-    - master
+    refs:
+      - trunk
+      - feature/ubuntu
 
+.common-ubuntu:
+  image: docker
+  stage: build
+  services:
+    - docker:19-dind
+  retry: 2
+  tags:
+    - buildx
+  variables:
+    DOCKER_TLS_CERTDIR: "/certs"
+    DOCKER_TLS_VERIFY: 1
+    DOCKER_CERT_PATH: "$DOCKER_TLS_CERTDIR/client"
+  before_script:
+    - i=0; while [ "$i" -lt 12 ]; do docker info && break; sleep 5; i=$(( i + 1 )) ; done
+    - apk add curl
+    - mkdir -vp ~/.docker/cli-plugins/ ~/dockercache
+    - curl --silent -L "https://github.com/docker/buildx/releases/download/${BUILDX_VERSION}/buildx-${BUILDX_VERSION}.linux-amd64" > ~/.docker/cli-plugins/docker-buildx
+    - chmod a+x ~/.docker/cli-plugins/docker-buildx
+    - docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    - docker context create dindbuilder
+    - docker context use dindbuilder
+    - docker buildx create --use
+    - docker buildx inspect --bootstrap
+  script:
+    - |
+      export DOCKER_TAG=${PHP_VERSION}
+    - docker buildx build --no-cache --pull --build-arg BASE_IMAGE=${CI_BASE_IMAGE:-10up/base-php}:${PHP_VERSION}-ubuntu --build-arg PHP_VERSION=$PHP_VERSION --tag $CI_REGISTRY_IMAGE:${DOCKER_TAG}-ubuntu --tag $CI_REGISTRY_IMAGE:${DOCKER_TAG}-${CI_COMMIT_SHORT_SHA}-ubuntu --platform ${PLATFORMS} --push .
+  when: on_success
+  only:
+    refs:
+      - trunk
+      - feature/ubuntu
+
+# centos versions
 PHP 5.6:
   variables:
     PHP_VERSION: '5.6'
@@ -38,6 +99,7 @@ PHP 7.0:
   extends: .common
 
 PHP 7.1:
+  stage: build
   variables:
     PHP_VERSION: '7.1'
     BASE: 'centos7'
@@ -66,3 +128,47 @@ PHP 8.0:
     PHP_VERSION: '8.0'
     BASE: 'centos8'
   extends: .common
+
+# ubuntu versions
+PHP 5.6-ubuntu:
+  variables:
+    PHP_VERSION: '5.6'
+    PLATFORMS: 'linux/amd64,linux/arm64'
+  extends: .common-ubuntu
+
+PHP 7.0-ubuntu:
+  variables:
+    PHP_VERSION: '7.0'
+    PLATFORMS: 'linux/amd64,linux/arm64'
+  extends: .common-ubuntu
+
+PHP 7.1-ubuntu:
+  stage: build
+  variables:
+    PHP_VERSION: '7.1'
+    PLATFORMS: 'linux/amd64,linux/arm64'
+  extends: .common-ubuntu
+
+PHP 7.2-ubuntu:
+  variables:
+    PHP_VERSION: '7.2'
+    PLATFORMS: 'linux/amd64,linux/arm64'
+  extends: .common-ubuntu
+
+PHP 7.3-ubuntu:
+  variables:
+    PHP_VERSION: '7.3'
+    PLATFORMS: 'linux/amd64,linux/arm64'
+  extends: .common-ubuntu
+
+PHP 7.4-ubuntu:
+  variables:
+    PHP_VERSION: '7.4'
+    PLATFORMS: 'linux/amd64,linux/arm64'
+  extends: .common-ubuntu
+
+PHP 8.0-ubuntu:
+  variables:
+    PHP_VERSION: '8.0'
+    PLATFORMS: 'linux/amd64,linux/arm64'
+  extends: .common-ubuntu
