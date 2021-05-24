@@ -1,8 +1,8 @@
 ARG PHP_VERSION=7.1
 
-# Set a BASE_IMAGE CI var to specify a different base image
-ARG BASE_IMAGE=10up/base-php:${PHP_VERSION}-ubuntu
-FROM ${BASE_IMAGE}
+# Set a BASE_IMAGE CI var to specify a different base image without a tag
+ARG BASE_IMAGE=10up/base-php
+FROM ${BASE_IMAGE}:${PHP_VERSION}-ubuntu
 
 ARG PHP_VERSION=7.1
 
@@ -31,11 +31,11 @@ RUN mkdir -p /run/php-fpm && \
   chown 33:33 /var/log/newrelic
 
 COPY config/php-fpm.conf /etc/php/${PHP_VERSION}/fpm/php-fpm.conf
-COPY config/www.conf /etc/php/${PHP_VERSION}/fpm/pool.d//www.conf
+COPY config/www.conf /etc/php/${PHP_VERSION}/fpm/pool.d/www.conf
 COPY config/docker-opcache.ini /etc/php/${PHP_VERSION}/mods-available/docker-opcache.ini
 
-RUN echo "post_max_size = 150m" >> /etc/php/${PHP_VERSION}/mods-available/upload-limits.ini
-RUN echo "upload_max_filesize = 150m" >> /etc/php/${PHP_VERSION}/mods-available/upload-limits.ini
+RUN echo "post_max_size = ${UPLOAD_LIMIT}" >> /etc/php/${PHP_VERSION}/mods-available/upload-limits.ini
+RUN echo "upload_max_filesize = ${UPLOAD_LIMIT}" >> /etc/php/${PHP_VERSION}/mods-available/upload-limits.ini
 RUN echo "catch_workers_output = yes" >> /etc/php-fpm.d/www.conf
 RUN chown 33:33 /etc/php-fpm.d/www.conf
 RUN phpdismod opcache && phpenmod docker-opcache upload-limits
