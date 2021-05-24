@@ -1,6 +1,8 @@
 # CentOS - wp-php-fpm
 
-This image extends the base-php image to include php-fpm focusing on serving WordPress. This image also includes the New Relic PHP agent which is disabled by default.
+> This image extends the `base-php` image to include `php-fpm` focussing on serving WordPress.  This image also includes the New Relic PHP agent which is disabled by default.
+
+[![Support Level](https://img.shields.io/badge/support-active-green.svg)](#support-level) [![MIT License](https://img.shields.io/github/license/10up/wp-php-fpm.svg)](https://github.com/10up/wp-php-fpm/blob/master/LICENSE)
 
 ## Usage
 
@@ -54,5 +56,5 @@ This project takes advantage of custom build phase hooks as described at https:/
 ## Like what you see?
 
 <p align="center">
-<a href="http://10up.com/contact/"><img src="https://10updotcom-wpengine.s3.amazonaws.com/uploads/2016/10/10up-Github-Banner.png" width="850"></a>
+<a href="http://10up.com/contact/"><img src="https://10up.com/uploads/2016/10/10up-Github-Banner.png" width="850"></a>
 </p>
