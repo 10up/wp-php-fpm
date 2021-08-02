@@ -24,7 +24,7 @@ jobs:
         uses: docker/build-push-action@v2.4.0
         with:
           push: false
-          platforms: linux/amd64,linux/arm64,linux/arm/v7
+          platforms: linux/amd64,linux/arm64
           build-args: PHP_VERSION=${{ matrix.version }}
           tags: ${{ secrets.IMAGE_NAME }}:${{ matrix.version }}-ubuntu
 

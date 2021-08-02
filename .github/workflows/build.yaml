@@ -5,7 +5,7 @@ on:
     branches:
       - 'trunk'
   schedule:
-    - cron: 0 0 * * 0
+    - cron: 0 1 * * 0
 
 jobs:
   Build_PHP_Ubuntu:
@@ -33,7 +33,7 @@ jobs:
         uses: docker/build-push-action@v2.4.0
         with:
           push: true
-          platforms: linux/amd64,linux/arm64,linux/arm/v7
+          platforms: linux/amd64,linux/arm64
           build-args: PHP_VERSION=${{ matrix.version }}
           tags: ${{ secrets.IMAGE_NAME }}:${{ matrix.version }}-ubuntu
 
