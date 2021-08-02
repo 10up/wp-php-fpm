@@ -1,4 +1,4 @@
-# CentOS - wp-php-fpm
+# 10up/wp-php-fpm
 
 > This image extends the `base-php` image to include `php-fpm` focussing on serving WordPress.  This image also includes the New Relic PHP agent which is disabled by default.
 
@@ -11,7 +11,7 @@ This image runs just php-fpm and expects that files are located at `/var/www/htm
 ```
 docker run -d --name phpfpm \
   -v /var/www/html:/var/www/html
-  10up/wp-php-fpm
+  10up/wp-php-fpm:<php version>-ubuntu
 ```
 
 This image is configured with MSMTP for handling email. It can only be configured to talk to an even smarter smart host meaning it cannot be configured with authentication of any sort. To configure MSMTP pass the following environment variables
@@ -47,7 +47,16 @@ Change `SESSION_PATH` value to memcached server's IP address or host record
 
 ## Building
 
-This project takes advantage of custom build phase hooks as described at https://docs.docker.com/docker-hub/builds/advanced/. When setting up builds on docker hub create automated builds with rules to build for the master branch for each PHP version you want built. Currently this image is built with 5.6, 7.0, 7.1, 7.2, 7.3 and 7.4.
+This image uses GitHub actions. For it to work you must create an environment called Build and then create the following variables:
+
+`IMAGE_NAME` - The name of the image. For example, 10up sets this value to `10up/wp-php-fpm`. You must set this to your own Docker hub namespace.
+`DOCKERHUB_USERNAME` - The username for the Docker hub account you wish to push images to.
+`DOCKERHUB_TOKEN` - The token to use against your Docker hub account.
+`BASE_IMAGE` - The base image to build this image from. Typically this is `10up/base-php`. If you are also customizing the base-php image then setting this variable will ensure wp-php-fpm is built from your customized base image.
+
+### A note about branches
+
+The default workflow will create images differently depending on the branch. `develop` will create and push an image to Docker hub tagged as `10up/wp-php-fpm:<php version>-ubuntu-dev` while the `trunk` branch will create and push an image called `10up/wp-php-fpm:<php version>-ubuntu`. This behavior is defined and can be modified in `.github/workflows/build.yaml`.
 
 ## Support Level
 
