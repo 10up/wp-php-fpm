@@ -54,7 +54,7 @@ jobs:
           push: false
           context: centos7
           platforms: linux/amd64
-          build-args: PHP_VERSION=${{ env.REMI_PHP_VERSION }}
+          build-args: PHP_VERSION=${{ matrix.version }}
           tags: ${{ secrets.IMAGE_NAME }}:${{ matrix.version }}
 
   Build_PHP_CentOS8_Test:
