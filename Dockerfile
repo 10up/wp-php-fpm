@@ -38,7 +38,7 @@ RUN echo "post_max_size = ${UPLOAD_LIMIT}" >> /etc/php/${PHP_VERSION}/mods-avail
 RUN echo "upload_max_filesize = ${UPLOAD_LIMIT}" >> /etc/php/${PHP_VERSION}/mods-available/upload-limits.ini
 RUN echo "catch_workers_output = yes" >> /etc/php-fpm.d/www.conf
 RUN chown 33:33 /etc/php-fpm.d/www.conf
-RUN phpdismod opcache && phpenmod docker-opcache upload-limits
+RUN phpdismod opcache && phpenmod docker-opcache upload-limits opcache
 RUN ln -s /usr/sbin/php-fpm${PHP_VERSION} /usr/sbin/php-fpm
 
 RUN echo 'alias ls="ls --color=auto"' > /etc/profile.d/colorls.sh
