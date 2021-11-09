@@ -28,7 +28,9 @@ RUN mkdir -p /run/php-fpm && \
   chown 33:33 /var/log/php${PHP_VERSION}-fpm.log && \
   ln -s /etc/php/${PHP_VERSION}/fpm/pool.d/ /etc/php-fpm.d && \
   mkdir -p /var/log/newrelic && \
-  chown 33:33 /var/log/newrelic
+  chown 33:33 /var/log/newrelic && \
+  chown 33:33 /etc/php/${PHP_VERSION}/mods-available/newrelic.ini && \
+  rm -f /etc/php/*/*/conf.d/newrelic.ini
 
 COPY config/php-fpm.conf /etc/php/${PHP_VERSION}/fpm/php-fpm.conf
 COPY config/www.conf /etc/php/${PHP_VERSION}/fpm/pool.d/www.conf
@@ -38,7 +40,7 @@ RUN echo "post_max_size = ${UPLOAD_LIMIT}" >> /etc/php/${PHP_VERSION}/mods-avail
 RUN echo "upload_max_filesize = ${UPLOAD_LIMIT}" >> /etc/php/${PHP_VERSION}/mods-available/upload-limits.ini
 RUN echo "catch_workers_output = yes" >> /etc/php-fpm.d/www.conf
 RUN chown 33:33 /etc/php-fpm.d/www.conf
-RUN phpdismod opcache && phpenmod docker-opcache upload-limits opcache
+RUN phpdismod opcache && phpenmod docker-opcache upload-limits opcache newrelic
 RUN ln -s /usr/sbin/php-fpm${PHP_VERSION} /usr/sbin/php-fpm
 
 RUN echo 'alias ls="ls --color=auto"' > /etc/profile.d/colorls.sh
