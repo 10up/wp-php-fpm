@@ -14,11 +14,11 @@ RUN \
   if [ "${PHP_VERSION}" = "8.1" ]; then exit 0; fi ; export NR_AGENT_VERSION=$(curl https://download.newrelic.com/php_agent/release/ | grep "linux.tar" | sed -E 's/.*release\/(.+)\".*/\1/'); curl -so - https://download.newrelic.com/php_agent/release/${NR_AGENT_VERSION} | tar zxf - && \
   cd newrelic-php* && NR_INSTALL_SILENT=1 NR_INSTALL_USE_CP_NOT_LN=1 ./newrelic-install install && \
   rm -rf /tmp/nrinstall* && \
-  mv /etc/php/*/fpm/conf.d/newrelic.ini /etc/php/${PHP_VERSION}/mods-available/newrelic.ini && \
   echo 'newrelic.daemon.start_timeout = "5s"' >> /etc/php/${PHP_VERSION}/mods-available/newrelic.ini && \
   echo 'newrelic.daemon.app_connect_timeout = "15s"' >> /etc/php/${PHP_VERSION}/mods-available/newrelic.ini && \
   echo 'newrelic.logfile = /dev/stderr' >> /etc/php/${PHP_VERSION}/mods-available/newrelic.ini && \
-  echo 'newrelic.loglevel = warning' >> /etc/php/${PHP_VERSION}/mods-available/newrelic.ini
+  echo 'newrelic.loglevel = warning' >> /etc/php/${PHP_VERSION}/mods-available/newrelic.ini && \
+  echo 'newrelic.enabled = false' >> /etc/php/${PHP_VERSION}/mods-available/newrelic.ini
 
 RUN mkdir -p /run/php-fpm && \
   chown 33:33 /run/php-fpm && \
@@ -29,7 +29,8 @@ RUN mkdir -p /run/php-fpm && \
   ln -s /etc/php/${PHP_VERSION}/fpm/pool.d/ /etc/php-fpm.d && \
   mkdir -p /var/log/newrelic && \
   chown 33:33 /var/log/newrelic && \
-  chown 33:33 /etc/php/${PHP_VERSION}/mods-available/newrelic.ini
+  chown 33:33 /etc/php/${PHP_VERSION}/mods-available/newrelic.ini && \
+  rm -f /etc/php/*/*/conf.d/newrelic.ini
 
 COPY config/php-fpm.conf /etc/php/${PHP_VERSION}/fpm/php-fpm.conf
 COPY config/www.conf /etc/php/${PHP_VERSION}/fpm/pool.d/www.conf
