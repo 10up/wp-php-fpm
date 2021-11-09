@@ -14,11 +14,16 @@ EOF
 
 
 if [ ! -z "${NR_LICENSE_KEY}" ]; then
-cat > /etc/php/*/mods-available/newrelic.ini <<EOF
+cat >> /etc/php/*/mods-available/newrelic.ini <<EOF
 newrelic.enabled = true
+newrelic.framework.wordpress.hooks = true
 newrelic.daemon.address = ${NR_HOST}
 newrelic.license = ${NR_LICENSE_KEY}
 newrelic.appname = ${NR_APP_NAME:-wordpress}
+EOF
+else
+cat >> /etc/php/*/mods-available/newrelic.ini <<EOF
+newrelic.enabled = false
 EOF
 fi
 
