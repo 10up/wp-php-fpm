@@ -45,7 +45,7 @@ RUN ln -s /usr/sbin/php-fpm${PHP_VERSION} /usr/sbin/php-fpm
 
 RUN echo 'alias ls="ls --color=auto"' > /etc/profile.d/colorls.sh
 COPY entrypoint.sh /entrypoint.sh
-RUN ln -s /usr/local/bin/msmtp /usr/sbin/sendmail && chmod +x /entrypoint.sh
+RUN ln -s /usr/bin/msmtp /usr/sbin/sendmail && chmod +x /entrypoint.sh
 
 USER www-data
 WORKDIR /var/www/html
