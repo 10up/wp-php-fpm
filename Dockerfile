@@ -1,17 +1,17 @@
-ARG PHP_VERSION=7.1
+ARG PHP_VERSION=7.4
 
 # Set a BASE_IMAGE CI var to specify a different base image without a tag
 ARG BASE_IMAGE=10up/base-php
 FROM ${BASE_IMAGE}:${PHP_VERSION}-ubuntu
 
-ARG PHP_VERSION=7.1
+ARG PHP_VERSION=7.4
 
 USER root
 
 RUN set -x; apt install php${PHP_VERSION}-fpm msmtp curl -y && apt clean
 
 RUN \
-  if [ "${PHP_VERSION}" = "8.1" ]; then exit 0; fi ; export NR_AGENT_VERSION=$(curl https://download.newrelic.com/php_agent/release/ | grep "linux.tar" | sed -E 's/.*release\/(.+)\".*/\1/'); curl -so - https://download.newrelic.com/php_agent/release/${NR_AGENT_VERSION} | tar zxf - && \
+  if [ "${PHP_VERSION}" = "8.2" ]; then exit 0; fi ; export NR_AGENT_VERSION=$(curl https://download.newrelic.com/php_agent/release/ | grep "linux.tar" | sed -E 's/.*release\/(.+)\".*/\1/'); curl -so - https://download.newrelic.com/php_agent/release/${NR_AGENT_VERSION} | tar zxf - && \
   cd newrelic-php* && NR_INSTALL_SILENT=1 NR_INSTALL_USE_CP_NOT_LN=1 ./newrelic-install install && \
   rm -rf /tmp/nrinstall* && \
   echo 'newrelic.daemon.start_timeout = "5s"' >> /etc/php/${PHP_VERSION}/mods-available/newrelic.ini && \
