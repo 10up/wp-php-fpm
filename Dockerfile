@@ -8,7 +8,7 @@ ARG PHP_VERSION=7.4
 
 USER root
 
-RUN set -x; apt install php${PHP_VERSION}-fpm msmtp curl -y && apt clean
+RUN set -x; apt-get update; apt install php${PHP_VERSION}-fpm msmtp curl -y && apt clean all; rm -rf /var/lib/apt/lists/* 
 
 RUN \
   if [ "${PHP_VERSION}" = "8.2" ]; then exit 0; fi ; export NR_AGENT_VERSION=$(curl https://download.newrelic.com/php_agent/release/ | grep "linux.tar" | sed -E 's/.*release\/(.+)\".*/\1/'); curl -so - https://download.newrelic.com/php_agent/release/${NR_AGENT_VERSION} | tar zxf - && \
