@@ -67,4 +67,3 @@ The default workflow will create images differently depending on the branch. `de
 <p align="center">
 <a href="http://10up.com/contact/"><img src="https://10up.com/uploads/2016/10/10up-Github-Banner.png" width="850"></a>
 </p>
-
