@@ -11,6 +11,7 @@ USER root
 
 RUN set -x; apt-get update; apt install php${PHP_VERSION}-fpm msmtp curl -y && apt clean all; rm -rf /var/lib/apt/lists/* 
 
+# Routine to install newrelic agent
 RUN \
   if [ "${TARGETPLATFORM}" = "linux/arm64" ] ; then exit 0; fi ; export NR_AGENT_VERSION=$(curl https://download.newrelic.com/php_agent/release/ | grep "linux.tar" | sed -E 's/.*release\/(.+)\".*/\1/'); curl -so - https://download.newrelic.com/php_agent/release/${NR_AGENT_VERSION} | tar zxf - && \
   cd newrelic-php* && NR_INSTALL_SILENT=1 NR_INSTALL_USE_CP_NOT_LN=1 ./newrelic-install install && \
@@ -25,6 +26,19 @@ RUN \
   chown 33:33 /etc/php/${PHP_VERSION}/mods-available/newrelic.ini && \
   rm -f /etc/php/*/*/conf.d/newrelic.ini && \
   phpenmod newrelic
+
+# Routine to install Data Dog agent
+# https://docs.datadoghq.com/tracing/trace_collection/dd_libraries/php/?tab=containers
+# You must set DD_AGENT_HOST and DD_TRACE_AGENT_PORT to point at your DD 
+# We also clean up whatever this config file layout is
+RUN \
+  curl -LO https://github.com/DataDog/dd-trace-php/releases/latest/download/datadog-setup.php -o /tmp/datadog-setup.php && \
+  php datadog-setup.php --php-bin=all && \
+  rm -f /tmp/datadog-setup.php && \ 
+  mv /etc/php/${PHP_VERSION}/cli/conf.d/98-ddtrace.ini /etc/php/${PHP_VERSION}/mods-available/ddtrace.ini && \
+  rm -f /etc/php/${PHP_VERSION}/fpm/conf.d/98-ddtrace.ini 
+  # ln -s /etc/php/${PHP_VERSION}/mods-available/ddtrace.ini /etc/php/${PHP_VERSION}/cli/conf.d/98-ddtrace.ini && \
+  # ln -s /etc/php/${PHP_VERSION}/mods-available/ddtrace.ini /etc/php/${PHP_VERSION}/fpm/conf.d/98-ddtrace.ini 
 
 RUN \
   mkdir -p /run/php-fpm && \
