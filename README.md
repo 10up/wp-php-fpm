@@ -1,6 +1,6 @@
 # 10up/wp-php-fpm
 
-> This image extends the `base-php` image to include `php-fpm` focussing on serving WordPress.  This image also includes the New Relic PHP agent which is disabled by default.
+> This image extends the `base-php` image to include `php-fpm` focussing on serving WordPress.  This image also includes the New Relic PHP agent as well as the Data Dog integration. Both are disabled by default and must be enabled by passing the correct ENV vars which are detailed below.
 
 [![Support Level](https://img.shields.io/badge/support-active-green.svg)](#support-level) [![MIT License](https://img.shields.io/github/license/10up/wp-php-fpm.svg)](https://github.com/10up/wp-php-fpm/blob/master/LICENSE)
 
@@ -33,6 +33,15 @@ newrelic.daemon.address = "HOST:PORT"
 ```
 
 The configuration assumes you will have the New Relic Daemon running elsewhere as a separate container or process. You can read more about it at https://docs.newrelic.com/docs/agents/php-agent/advanced-installation/docker-other-container-environments-install-php-agent#install-diff-containers.
+
+### Using Data Dog Integration
+
+By default, the Data Dog integration is installed but disabled. To enable it you can pass:
+
+* `DD_ENABLED` (required) - set this to true to enable the Data Dog integration. False by default.
+* `DD_PROFILING_ENABLED` (optional) - set this to true to enable profiling. False by default.
+
+See official Data Dog documentation for additional configuration options.
 
 ### Session Variables
 
