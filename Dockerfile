@@ -15,7 +15,7 @@ RUN apt-get update; apt install php${PHP_VERSION}-fpm msmtp curl -y && apt clean
 
 # Routine to install newrelic agent
 RUN \
-  if [[ "${TARGETPLATFORM}" = "linux/arm64" ]] || [[ "$(uname -m)" = "aarch64" ]]; then exit 0; fi ; export NR_AGENT_VERSION=$(curl https://download.newrelic.com/php_agent/release/ | grep "linux.tar" | sed -E 's/.*release\/(.+)\".*/\1/'); curl -so - https://download.newrelic.com/php_agent/release/${NR_AGENT_VERSION} | tar zxf - && \
+  if [[ "${TARGETPLATFORM}" = "linux/arm64" ]] || [[ "$(uname -m)" = "aarch64" ]]; then exit 0; fi ; export NR_AGENT_VERSION="newrelic-php5-9.20.0.310-linux.tar.gz"; curl -so - https://download.newrelic.com/php_agent/archive/9.20.0.310/${NR_AGENT_VERSION} | tar zxf - && \
   cd newrelic-php* && NR_INSTALL_SILENT=1 NR_INSTALL_USE_CP_NOT_LN=1 ./newrelic-install install && \
   rm -rf /tmp/nrinstall* && \
   echo 'newrelic.daemon.start_timeout = "5s"' >> /etc/php/${PHP_VERSION}/mods-available/newrelic.ini && \
