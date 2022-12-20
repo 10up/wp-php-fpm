@@ -35,7 +35,7 @@ RUN \
 # We also clean up whatever this config file layout is
 RUN \
   curl -LO https://github.com/DataDog/dd-trace-php/releases/latest/download/datadog-setup.php -o /tmp/datadog-setup.php && \
-  php datadog-setup.php --enable-profiling --php-bin=all && \
+  if [[ ${PHP_VERSION} = "5.6" ]] || [[ ${PHP_VERSION} = "7.0" ]]; then php datadog-setup.php --php-bin=all; else php datadog-setup.php --enable-profiling --php-bin=all; fi && \
   rm -f /tmp/datadog-setup.php && \ 
   mv /etc/php/${PHP_VERSION}/cli/conf.d/98-ddtrace.ini /etc/php/${PHP_VERSION}/mods-available/ddtrace.ini && \
   rm -f /etc/php/${PHP_VERSION}/fpm/conf.d/98-ddtrace.ini

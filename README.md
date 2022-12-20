@@ -39,7 +39,7 @@ The configuration assumes you will have the New Relic Daemon running elsewhere a
 By default, the Data Dog integration is installed but disabled. To enable it you can pass:
 
 * `DD_ENABLED` (required) - set this to true to enable the Data Dog integration. False by default.
-* `DD_PROFILING_ENABLED` (optional) - set this to true to enable profiling. False by default.
+* `DD_PROFILING_ENABLED` (optional) - set this to true to enable profiling. True by default. **NOTE** Profiling is not available on PHP < 7.1.
 
 See official Data Dog documentation for additional configuration options.
 
