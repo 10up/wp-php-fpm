@@ -34,7 +34,7 @@ RUN \
 # You must set DD_AGENT_HOST and DD_TRACE_AGENT_PORT to point at your DD Agent
 # We also clean up whatever this config file layout is
 RUN \
-  curl -LO https://github.com/DataDog/dd-trace-php/releases/latest/download/datadog-setup.php -o /tmp/datadog-setup.php && \
+  curl -LO https://github.com/DataDog/dd-trace-php/releases/download/0.82.0/datadog-setup.php -o /tmp/datadog-setup.php && \
   if [[ ${PHP_VERSION} = "5.6" ]] || [[ ${PHP_VERSION} = "7.0" ]]; then php datadog-setup.php --php-bin=all; else php datadog-setup.php --enable-profiling --php-bin=all; fi && \
   rm -f /tmp/datadog-setup.php && \ 
   mv /etc/php/${PHP_VERSION}/cli/conf.d/98-ddtrace.ini /etc/php/${PHP_VERSION}/mods-available/ddtrace.ini && \
