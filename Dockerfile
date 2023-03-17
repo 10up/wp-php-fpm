@@ -1,7 +1,7 @@
 ARG PHP_VERSION=7.4
 
 # Set a BASE_IMAGE CI var to specify a different base image without a tag
-ARG BASE_IMAGE=10up/base-php
+ARG BASE_IMAGE=ghcr.io/10up/base-php
 FROM ${BASE_IMAGE}:${PHP_VERSION}-ubuntu
 
 ARG PHP_VERSION=7.4
