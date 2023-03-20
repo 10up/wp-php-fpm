@@ -11,7 +11,7 @@ This image runs just php-fpm and expects that files are located at `/var/www/htm
 ```
 docker run -d --name phpfpm \
   -v /var/www/html:/var/www/html
-  10up/wp-php-fpm:<php version>-ubuntu
+  ghcr.io/10up/wp-php-fpm:<php version>-ubuntu
 ```
 
 This image is configured with MSMTP for handling email. It can only be configured to talk to an even smarter smart host meaning it cannot be configured with authentication of any sort. To configure MSMTP pass the following environment variables
@@ -34,9 +34,9 @@ newrelic.daemon.address = "HOST:PORT"
 
 The configuration assumes you will have the New Relic Daemon running elsewhere as a separate container or process. You can read more about it at https://docs.newrelic.com/docs/agents/php-agent/advanced-installation/docker-other-container-environments-install-php-agent#install-diff-containers.
 
-### Using Data Dog Integration
+### Using Datadog Integration
 
-By default, the Data Dog integration is installed but disabled. To enable it you can pass:
+By default, the Datadog integration is installed but disabled. To enable it you can pass:
 
 * `DD_ENABLED` (required) - set this to true to enable the Data Dog integration. False by default.
 * `DD_PROFILING_ENABLED` (optional) - set this to true to enable profiling. True by default. **NOTE** Profiling is not available on PHP < 7.1.
@@ -58,14 +58,43 @@ Change `SESSION_PATH` value to memcached server's IP address or host record
 
 This image uses GitHub actions. For it to work you must create an environment called Build and then create the following variables:
 
-`IMAGE_NAME` - The name of the image. For example, 10up sets this value to `10up/wp-php-fpm`. You must set this to your own Docker hub namespace.
-`DOCKERHUB_USERNAME` - The username for the Docker hub account you wish to push images to.
-`DOCKERHUB_TOKEN` - The token to use against your Docker hub account.
-`BASE_IMAGE` - The base image to build this image from. Typically this is `10up/base-php`. If you are also customizing the base-php image then setting this variable will ensure wp-php-fpm is built from your customized base image.
+* `IMAGE_NAME` - The name of the image. For example, 10up sets this value to `ghcr.io/10up/wp-php-fpm`. You must set this to your own Docker hub namespace.
+* `DOCKERHUB_USERNAME` - The username for the Docker hub account you wish to push images to.
+* `DOCKERHUB_TOKEN` - The token to use against your Docker hub account.
+* `BASE_IMAGE` - The base image to build this image from. Typically this is `10up/base-php`. If you are also customizing the base-php image then setting this variable will ensure wp-php-fpm is built from your customized base image. Note that we do not build CentOS/Rocky Linux based images beyond 8.0 and they will be removed in the future. 
 
-### A note about branches
+Also note that CentOS/RL based images are not being pushed to ghcr.io!
 
-The default workflow will create images differently depending on the branch. `develop` will create and push an image to Docker hub tagged as `10up/wp-php-fpm:<php version>-ubuntu-dev` while the `trunk` branch will create and push an image called `10up/wp-php-fpm:<php version>-ubuntu`. This behavior is defined and can be modified in `.github/workflows/build.yaml`.
+Images are available under the tags:
+
+* CentOS 7 based
+  * 10up/wp-php-fpm:5.6 (Deprecated, no longer refreshed)
+  * 10up/wp-php-fpm:7.0 (Deprecated)
+  * 10up/wp-php-fpm:7.1 (Deprecated)
+* Rocky Linux 8 based
+  * 10up/wp-php-fpm:7.2 (Deprecated)
+  * 10up/wp-php-fpm:7.3 (Deprecated)
+  * 10up/wp-php-fpm:7.4 (Deprecated)
+  * 10up/wp-php-fpm:8.0 (Deprecated)
+* Ubuntu 22.04 based (Docker Hub)
+  * 10up/wp-php-fpm:7.0-ubuntu
+  * 10up/wp-php-fpm:7.1-ubuntu
+  * 10up/wp-php-fpm:7.2-ubuntu
+  * 10up/wp-php-fpm:7.3-ubuntu
+  * 10up/wp-php-fpm:7.4-ubuntu
+  * 10up/wp-php-fpm:8.0-ubuntu
+  * 10up/wp-php-fpm:8.1-ubuntu
+  * 10up/wp-php-fpm:8.2-ubuntu
+* Ubuntu 22.04 based (Github Packages)
+  * ghcr.io/10up/wp-php-fpm:7.0-ubuntu
+  * ghcr.io/10up/wp-php-fpm:7.1-ubuntu
+  * ghcr.io/10up/wp-php-fpm:7.2-ubuntu
+  * ghcr.io/10up/wp-php-fpm:7.3-ubuntu
+  * ghcr.io/10up/wp-php-fpm:7.4-ubuntu
+  * ghcr.io/10up/wp-php-fpm:8.0-ubuntu
+  * ghcr.io/10up/wp-php-fpm:8.1-ubuntu
+  * ghcr.io/10up/wp-php-fpm:8.2-ubuntu
+
 
 ## Support Level
 
