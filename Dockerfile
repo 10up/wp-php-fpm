@@ -4,6 +4,10 @@ ARG PHP_VERSION=8.2
 ARG BASE_IMAGE=ghcr.io/10up/base-php
 FROM ${BASE_IMAGE}:${PHP_VERSION}-ubuntu
 
+LABEL "org.opencontainers.image.source" "https://github.com/10up/wp-php-fpm"
+LABEL "org.opencontainers.image.title" "wp-php-fpm"
+LABEL "org.opencontainers.image.url" "https://github.com/10up/wp-php-fpm"
+
 ARG PHP_VERSION=8.2
 ARG TARGETPLATFORM
 
@@ -66,6 +70,7 @@ RUN ln -s /usr/sbin/php-fpm${PHP_VERSION} /usr/sbin/php-fpm
 
 RUN echo 'alias ls="ls --color=auto"' > /etc/profile.d/colorls.sh
 COPY entrypoint.sh /entrypoint.sh
+COPY entrypoint.d /entrypoint.d
 RUN ln -s /usr/bin/msmtp /usr/sbin/sendmail && chmod +x /entrypoint.sh
 
 USER www-data
