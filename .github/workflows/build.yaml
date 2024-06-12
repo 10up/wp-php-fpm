@@ -15,7 +15,6 @@ jobs:
     environment:
       name: Build
     runs-on: ubuntu-latest
-    if: ${{ github.ref == 'refs/heads/trunk' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -67,7 +66,6 @@ jobs:
     environment:
       name: Build
     runs-on: ubuntu-latest
-    if: ${{ github.ref == 'refs/heads/trunk' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
