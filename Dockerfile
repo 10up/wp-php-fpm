@@ -2,7 +2,8 @@ ARG PHP_VERSION=8.2
 
 # Set a BASE_IMAGE CI var to specify a different base image without a tag
 ARG BASE_IMAGE=ghcr.io/10up/base-php
-FROM ${BASE_IMAGE}:${PHP_VERSION}-ubuntu
+ARG UBUNTU_RELEASE_NAME=jammy
+FROM ${BASE_IMAGE}:${PHP_VERSION}-${UBUNTU_RELEASE_NAME}
 
 ARG PHP_VERSION=8.2
 ARG TARGETPLATFORM
@@ -15,7 +16,7 @@ RUN apt-get update; apt install php${PHP_VERSION}-fpm msmtp curl -y && apt clean
 
 # Routine to install newrelic agent
 RUN \
-  if [[ "${TARGETPLATFORM}" = "linux/arm64" ]] || [[ "$(uname -m)" = "aarch64" ]]; then exit 0; fi ; export NR_AGENT_VERSION="newrelic-php5-9.20.0.310-linux.tar.gz"; curl -so - https://download.newrelic.com/php_agent/archive/9.20.0.310/${NR_AGENT_VERSION} | tar zxf - && \
+  if [[ "${TARGETPLATFORM}" = "linux/arm64" ]] || [[ "$(uname -m)" = "aarch64" ]]; then exit 0; fi ; export NR_AGENT_VERSION="newrelic-php5-11.0.0.13-linux.tar.gz"; curl -so - https://download.newrelic.com/php_agent/archive/11.0.0.13/${NR_AGENT_VERSION} | tar zxf - && \
   cd newrelic-php* && NR_INSTALL_SILENT=1 NR_INSTALL_USE_CP_NOT_LN=1 ./newrelic-install install && \
   rm -rf /tmp/nrinstall* && \
   echo 'newrelic.daemon.start_timeout = "5s"' >> /etc/php/${PHP_VERSION}/mods-available/newrelic.ini && \
@@ -34,8 +35,8 @@ RUN \
 # You must set DD_AGENT_HOST and DD_TRACE_AGENT_PORT to point at your DD Agent
 # We also clean up whatever this config file layout is
 RUN \
-  curl -LO https://github.com/DataDog/dd-trace-php/releases/download/0.94.0/datadog-setup.php -o /tmp/datadog-setup.php && \
-  if [[ ${PHP_VERSION} = "5.6" ]] || [[ ${PHP_VERSION} = "7.0" ]]; then php datadog-setup.php --php-bin=all; else php datadog-setup.php --enable-profiling --php-bin=all; fi && \
+  curl -LO https://github.com/DataDog/dd-trace-php/releases/download/1.2.0/datadog-setup.php -o /tmp/datadog-setup.php && \
+  if [[ ${PHP_VERSION} = "5.6" ]] || [[ ${PHP_VERSION} = "7.0" ]]; then php datadog-setup.php --php-bin=all; else php datadog-setup.php --php-bin=all; fi && \
   rm -f /tmp/datadog-setup.php && \ 
   mv /etc/php/${PHP_VERSION}/cli/conf.d/98-ddtrace.ini /etc/php/${PHP_VERSION}/mods-available/ddtrace.ini && \
   rm -f /etc/php/${PHP_VERSION}/fpm/conf.d/98-ddtrace.ini

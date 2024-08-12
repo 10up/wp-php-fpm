@@ -12,52 +12,69 @@ jobs:
     strategy:
       matrix:
         version: ['7.0', '7.1', '7.2', '7.3', '7.4', '8.0', '8.1', '8.2', '8.3']
+        ubuntu-release-name: ['jammy', 'noble']
     environment:
       name: Build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.ref }}
 
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
+        uses: docker/setup-qemu-action@v3
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v3
 
-      - name: Login to DockerHub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Login to Github Packages
-        uses: docker/login-action@v2 
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@v4
+      - name: Extract metadata (tags, labels) for Docker (Jammy)
+        if: matrix.ubuntu-release-name == 'jammy'
+        id: meta-jammy
+        uses: docker/metadata-action@v5
         with:
           tags: |
-            type=raw,pattern={{version}},value=${{ matrix.version }}-ubuntu
+              type=raw,pattern={{version}},value=${{ matrix.version }}-${{ matrix.ubuntu-release-name }}
+              type=raw,pattern={{version}},value=${{ matrix.version }}-ubuntu
           images: |
             ${{ secrets.IMAGE_NAME }}
             ghcr.io/${{ github.repository }}
 
-      - name: Build and push Docker images
-        uses: docker/build-push-action@v4
+      - name: Extract metadata (tags, labels) for Docker (Others)
+        if: matrix.ubuntu-release-name != 'jammy'
+        id: meta-others
+        uses: docker/metadata-action@v5
+        with:
+          tags: |
+              type=raw,pattern={{version}},value=${{ matrix.version }}-${{ matrix.ubuntu-release-name }}
+          images: |
+            ${{ secrets.IMAGE_NAME }}
+            ghcr.io/${{ github.repository }}
+
+      - name: Build and push Docker images (Jammy)
+        if: matrix.ubuntu-release-name == 'jammy'
+        uses: docker/build-push-action@v6
         with:
           push: true
           platforms: linux/amd64,linux/arm64
-          build-args: PHP_VERSION=${{ matrix.version }}
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            PHP_VERSION=${{ matrix.version }}
+            UBUNTU_RELEASE_NAME=${{ matrix.ubuntu-release-name }}
+          tags: ${{ steps.meta-jammy.outputs.tags }}
+          labels: ${{ steps.meta-jammy.outputs.labels }}
+
+      - name: Build and push Docker images (Others)
+        if: matrix.ubuntu-release-name != 'jammy'
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          platforms: linux/amd64,linux/arm64
+          build-args: |
+            PHP_VERSION=${{ matrix.version }}
+            UBUNTU_RELEASE_NAME=${{ matrix.ubuntu-release-name }}
+          tags: ${{ steps.meta-others.outputs.tags }}
+          labels: ${{ steps.meta-others.outputs.labels }}
+
 
   Build_PHP_CentOS8:
     strategy:
@@ -68,24 +85,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.ref }}
 
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
+        uses: docker/setup-qemu-action@v3
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
-      - name: Login to DockerHub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+        uses: docker/setup-buildx-action@v3
 
       - name: Build and push CentOS based Docker images
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v6
         with:
           push: true
           context: centos8
