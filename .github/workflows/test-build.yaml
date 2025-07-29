@@ -13,7 +13,7 @@ jobs:
         ubuntu-release-name: ['jammy', 'noble']
     environment:
       name: Build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -54,7 +54,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: false
-          platforms: linux/amd64,linux/arm/v7
+          platforms: linux/amd64,linux/arm64
           build-args: |
             PHP_VERSION=${{ matrix.version }}
             UBUNTU_RELEASE_NAME=${{ matrix.ubuntu-release-name }}
