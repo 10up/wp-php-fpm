@@ -13,7 +13,7 @@ jobs:
         ubuntu-release-name: ['jammy', 'noble']
     environment:
       name: Build
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -54,7 +54,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: false
-          platforms: linux/amd64
+          platforms: linux/amd64,linux/arm64
           build-args: |
             PHP_VERSION=${{ matrix.version }}
             UBUNTU_RELEASE_NAME=${{ matrix.ubuntu-release-name }}
@@ -66,74 +66,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: false
-          platforms: linux/amd64
-          build-args: |
-            PHP_VERSION=${{ matrix.version }}
-            UBUNTU_RELEASE_NAME=${{ matrix.ubuntu-release-name }}
-          tags: ${{ steps.meta-others.outputs.tags }}
-          labels: ${{ steps.meta-others.outputs.labels }}
-
-  Build_PHP_Ubuntu_Test_ARM:
-    strategy:
-      matrix:
-        version: ['7.0', '7.1', '7.2', '7.3', '7.4', '8.0', '8.1', '8.2', '8.3']
-        ubuntu-release-name: ['jammy', 'noble']
-    environment:
-      name: Build
-    runs-on: ubuntu-22.04-arm
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.ref }}
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Extract metadata (tags, labels) for Docker (Jammy)
-        if: matrix.ubuntu-release-name == 'jammy'
-        id: meta-jammy
-        uses: docker/metadata-action@v5
-        with:
-          tags: |
-              type=raw,pattern={{version}},value=${{ matrix.version }}-${{ matrix.ubuntu-release-name }}
-              type=raw,pattern={{version}},value=${{ matrix.version }}-ubuntu
-          images: |
-            ${{ secrets.IMAGE_NAME }}
-            ghcr.io/${{ github.repository }}
-
-      - name: Extract metadata (tags, labels) for Docker (Others)
-        if: matrix.ubuntu-release-name != 'jammy'
-        id: meta-others
-        uses: docker/metadata-action@v5
-        with:
-          tags: |
-              type=raw,pattern={{version}},value=${{ matrix.version }}-${{ matrix.ubuntu-release-name }}
-          images: |
-            ${{ secrets.IMAGE_NAME }}
-            ghcr.io/${{ github.repository }}
-
-      - name: Build and push Docker images (Jammy)
-        if: matrix.ubuntu-release-name == 'jammy'
-        uses: docker/build-push-action@v6
-        with:
-          push: false
-          platforms: linux/arm64,linux/amd64
-          build-args: |
-            PHP_VERSION=${{ matrix.version }}
-            UBUNTU_RELEASE_NAME=${{ matrix.ubuntu-release-name }}
-          tags: ${{ steps.meta-jammy.outputs.tags }}
-          labels: ${{ steps.meta-jammy.outputs.labels }}
-
-      - name: Build and push Docker images (Others)
-        if: matrix.ubuntu-release-name != 'jammy'
-        uses: docker/build-push-action@v6
-        with:
-          push: false
-          platforms: linux/arm64,linux/amd64
+          platforms: linux/amd64,linux/arm64
           build-args: |
             PHP_VERSION=${{ matrix.version }}
             UBUNTU_RELEASE_NAME=${{ matrix.ubuntu-release-name }}
