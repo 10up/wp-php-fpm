@@ -52,6 +52,7 @@ jobs:
       - name: Build and push Docker images (Jammy)
         if: matrix.ubuntu-release-name == 'jammy'
         uses: docker/build-push-action@v6
+        run: uname -a
         with:
           push: false
           platforms: linux/amd64,linux/arm64
