@@ -41,7 +41,8 @@ RUN \
 #   mv /etc/php/${PHP_VERSION}/cli/conf.d/98-ddtrace.ini /etc/php/${PHP_VERSION}/mods-available/ddtrace.ini && \
 #   rm -f /etc/php/${PHP_VERSION}/fpm/conf.d/98-ddtrace.ini
 RUN \ 
-  curl -LO https://github.com/DataDog/dd-trace-php/releases/latest/download/datadog-setup.php
+  curl -LO https://github.com/DataDog/dd-trace-php/releases/latest/download/datadog-setup.php && \
+  php datadog-setup.php --php-bin=all
 
 RUN \
   mkdir -p /run/php-fpm && \
