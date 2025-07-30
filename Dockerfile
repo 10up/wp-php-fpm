@@ -12,7 +12,7 @@ ENV PHP_VERSION=${PHP_VERSION}
 
 USER root
 
-RUN apt-get update; apt install php${PHP_VERSION}-fpm msmtp curl build-essentials -y && apt clean all; rm -rf /var/lib/apt/lists/* 
+RUN apt-get update; apt install php${PHP_VERSION}-fpm msmtp curl libgcc-11-dev -y && apt clean all; rm -rf /var/lib/apt/lists/* 
 
 # Routine to install newrelic agent
 RUN \
