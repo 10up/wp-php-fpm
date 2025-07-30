@@ -72,12 +72,12 @@ RUN \
 # https://docs.datadoghq.com/tracing/trace_collection/dd_libraries/php/?tab=containers
 # You must set DD_AGENT_HOST and DD_TRACE_AGENT_PORT to point at your DD Agent
 # We also clean up whatever this config file layout is
-RUN \
-  curl -LO https://github.com/DataDog/dd-trace-php/releases/download/1.2.0/datadog-setup.php && \
-  if [[ ${PHP_VERSION} = "5.6" ]] || [[ ${PHP_VERSION} = "7.0" ]]; then php datadog-setup.php --php-bin=all; else php datadog-setup.php --php-bin=all; fi && \
-  rm -f datadog-setup.php && \ 
-  mv /etc/php/${PHP_VERSION}/cli/conf.d/98-ddtrace.ini /etc/php/${PHP_VERSION}/mods-available/ddtrace.ini && \
-  rm -f /etc/php/${PHP_VERSION}/fpm/conf.d/98-ddtrace.ini
+# RUN \
+#   curl -LO https://github.com/DataDog/dd-trace-php/releases/download/1.2.0/datadog-setup.php && \
+#   if [[ ${PHP_VERSION} = "5.6" ]] || [[ ${PHP_VERSION} = "7.0" ]]; then php datadog-setup.php --php-bin=all; else php datadog-setup.php --php-bin=all; fi && \
+#   rm -f datadog-setup.php && \ 
+#   mv /etc/php/${PHP_VERSION}/cli/conf.d/98-ddtrace.ini /etc/php/${PHP_VERSION}/mods-available/ddtrace.ini && \
+#   rm -f /etc/php/${PHP_VERSION}/fpm/conf.d/98-ddtrace.ini
 
 RUN \
   mkdir -p /run/php-fpm && \
