@@ -86,6 +86,7 @@ Images are available under the tags:
   * 10up/wp-php-fpm:8.1-ubuntu
   * 10up/wp-php-fpm:8.2-ubuntu
   * 10up/wp-php-fpm:8.3-ubuntu
+  * 10up/wp-php-fpm:8.4-ubuntu
 * Ubuntu 22.04 based (Github Packages)
   * ghcr.io/10up/wp-php-fpm:7.0-ubuntu
   * ghcr.io/10up/wp-php-fpm:7.1-ubuntu
@@ -96,6 +97,29 @@ Images are available under the tags:
   * ghcr.io/10up/wp-php-fpm:8.1-ubuntu
   * ghcr.io/10up/wp-php-fpm:8.2-ubuntu
   * ghcr.io/10up/wp-php-fpm:8.3-ubuntu
+  * ghcr.io/10up/wp-php-fpm:8.4-ubuntu
+* Ubuntu 24.04 based (Docker Hub)
+  * 10up/wp-php-cpm:7.0-noble
+  * 10up/wp-php-cpm:7.1-noble
+  * 10up/wp-php-cpm:7.2-noble
+  * 10up/wp-php-cpm:7.3-noble
+  * 10up/wp-php-cpm:7.4-noble
+  * 10up/wp-php-cpm:8.0-noble
+  * 10up/wp-php-cpm:8.1-noble
+  * 10up/wp-php-cpm:8.2-noble
+  * 10up/wp-php-cpm:8.3-noble
+  * 10up/wp-php-cpm:8.4-noble
+* Ubuntu 24.04 based (Github Packages)
+  * ghcr.io/10up/wp-php-cpm:7.0-noble
+  * ghcr.io/10up/wp-php-cpm:7.1-noble
+  * ghcr.io/10up/wp-php-cpm:7.2-noble
+  * ghcr.io/10up/wp-php-cpm:7.3-noble
+  * ghcr.io/10up/wp-php-cpm:7.4-noble
+  * ghcr.io/10up/wp-php-cpm:8.0-noble
+  * ghcr.io/10up/wp-php-cpm:8.1-noble
+  * ghcr.io/10up/wp-php-cpm:8.2-noble
+  * ghcr.io/10up/wp-php-cpm:8.3-noble
+  * ghcr.io/10up/wp-php-cpm:8.4-noble
 
 
 ## Support Level
@@ -107,4 +131,3 @@ Images are available under the tags:
 <p align="center">
 <a href="http://10up.com/contact/"><img src="https://10up.com/uploads/2016/10/10up-Github-Banner.png" width="850"></a>
 </p>
-
