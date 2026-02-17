@@ -8,7 +8,7 @@ on:
 jobs:
   Build_PHP_Ubuntu_Test:
     strategy:
-      max-parallel: 1
+      max-parallel: 4
       matrix:
         version: ['7.0', '7.1', '7.2', '7.3', '7.4', '8.0', '8.1', '8.2', '8.3', '8.4']
         ubuntu-release-name: ['jammy', 'noble']
